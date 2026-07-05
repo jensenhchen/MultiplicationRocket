@@ -9,6 +9,7 @@
   --panel: #ffffff;
   --space: #163a73;
   --touch-size: 60px;
+  --screen-gap: clamp(10px, 2.2vh, 18px);
 }
 
 * {
@@ -28,6 +29,8 @@ body {
   color: var(--ink);
   font-family: "Trebuchet MS", Arial, sans-serif;
   background:
+    radial-gradient(circle at 78% 14%, rgba(255, 255, 255, 0.78) 0 28px, transparent 29px),
+    radial-gradient(circle at 84% 16%, rgba(255, 255, 255, 0.58) 0 38px, transparent 39px),
     radial-gradient(circle at 18% 18%, #fff7b0 0 70px, transparent 71px),
     linear-gradient(180deg, #aee9ff 0%, #eefbff 48%, #fff7de 100%);
   overscroll-behavior: none;
@@ -36,7 +39,7 @@ body {
 }
 
 body.is-playing {
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 button {
@@ -79,13 +82,15 @@ button:disabled {
     max(18px, env(safe-area-inset-right))
     max(18px, env(safe-area-inset-bottom))
     max(18px, env(safe-area-inset-left));
+  overflow-x: hidden;
 }
 
 .hero {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
-  margin: 0 0 18px;
+  margin: 0 0 var(--screen-gap);
 }
 
 .hero h1 {
@@ -99,6 +104,24 @@ button:disabled {
   color: var(--muted);
   font-size: 1.1rem;
   font-weight: 700;
+}
+
+.hero-controls {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.icon-toggle {
+  min-height: 44px;
+  padding: 8px 12px;
+  color: var(--ink);
+  background: #ffffff;
+  box-shadow: 0 4px 0 #c9e6ff;
+  font-size: clamp(0.82rem, 2.4vw, 0.95rem);
 }
 
 .rocket-badge {
@@ -115,7 +138,7 @@ button:disabled {
 
 .panel {
   width: 100%;
-  padding: 24px;
+  padding: clamp(14px, 3vw, 24px);
   border: 4px solid rgba(255, 255, 255, 0.85);
   border-radius: 18px;
   background: var(--panel);
@@ -206,13 +229,13 @@ button:disabled {
 .result-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: clamp(6px, 1.5vw, 10px);
+  margin-bottom: var(--screen-gap);
 }
 
 .stats div,
 .result-stats div {
-  padding: 12px;
+  padding: clamp(8px, 2vw, 12px);
   border-radius: 12px;
   background: #eef7ff;
 }
@@ -229,26 +252,173 @@ button:disabled {
 .result-stats strong {
   display: block;
   margin-top: 4px;
-  font-size: 1.45rem;
+  font-size: clamp(1.1rem, 3.2vw, 1.45rem);
 }
 
 .rocket-area {
   position: relative;
-  height: 210px;
-  margin: 18px 0;
+  height: clamp(136px, 28vh, 250px);
+  min-height: 128px;
+  margin: var(--screen-gap) 0;
   overflow: hidden;
   border-radius: 16px;
   background:
+    radial-gradient(circle at 80% 24%, rgba(255, 255, 255, 0.22) 0 44px, transparent 45px),
     linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent),
     linear-gradient(180deg, var(--space), #367bd7 70%, #80d7ff);
+  contain: layout paint;
 }
 
 #rocket {
   position: absolute;
+  z-index: 4;
+  width: clamp(72px, 18vw, 118px);
+  height: auto;
+  aspect-ratio: 2 / 3;
   bottom: 10%;
   left: 50%;
-  font-size: 3.8rem;
-  transform: translateX(-50%) rotate(-18deg);
+  transform: translate3d(-50%, 0, 0);
+  transform-origin: 50% 72%;
+  will-change: bottom, transform;
+}
+
+.rocket-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.22));
+}
+
+.rocket-glow ellipse {
+  fill: rgba(255, 209, 102, 0.2);
+  opacity: 0;
+}
+
+.body-shell {
+  fill: #ffffff;
+  stroke: #d8ebff;
+  stroke-width: 3;
+}
+
+.fin {
+  fill: #ff6b6b;
+  stroke: #d64545;
+  stroke-width: 2;
+}
+
+.window-ring {
+  fill: #2667ff;
+}
+
+.window-glass {
+  fill: #bdefff;
+}
+
+.smile,
+.oops-mouth {
+  fill: none;
+  stroke: #172033;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.oops-mouth {
+  opacity: 0;
+}
+
+.flame,
+.smoke-trail,
+.sparkles,
+.oops-bubble,
+.fireworks {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flame-outer {
+  fill: #ff9f1c;
+}
+
+.flame-inner {
+  fill: #fff4cf;
+}
+
+.smoke-trail circle {
+  fill: rgba(255, 255, 255, 0.78);
+}
+
+.sparkles circle {
+  fill: #fff4cf;
+}
+
+.oops-bubble {
+  position: absolute;
+  right: -28px;
+  top: 18px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #9b2929;
+  background: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 900;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.moon {
+  position: absolute;
+  top: 18px;
+  right: 26px;
+  width: clamp(34px, 7vw, 58px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 66% 35%, #dfd7b8 0 6px, transparent 7px),
+    radial-gradient(circle at 38% 62%, #dfd7b8 0 5px, transparent 6px),
+    #fff6c8;
+  box-shadow: 0 0 22px rgba(255, 246, 200, 0.65);
+}
+
+.cloud {
+  position: absolute;
+  z-index: 1;
+  width: clamp(72px, 18vw, 138px);
+  height: clamp(24px, 6vw, 42px);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.cloud::before,
+.cloud::after {
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  background: inherit;
+}
+
+.cloud::before {
+  width: 42%;
+  height: 120%;
+  left: 16%;
+  bottom: 28%;
+}
+
+.cloud::after {
+  width: 34%;
+  height: 96%;
+  right: 16%;
+  bottom: 36%;
+}
+
+.cloud-one {
+  top: 22%;
+  left: 6%;
+}
+
+.cloud-two {
+  right: 10%;
+  bottom: 18%;
+  transform: scale(0.8);
 }
 
 .sky-mark {
@@ -274,21 +444,22 @@ button:disabled {
 }
 
 .question {
-  margin: 18px 0;
-  font-size: clamp(2.4rem, 12vw, 4.8rem);
+  margin: var(--screen-gap) 0;
+  font-size: clamp(2rem, 10vw, 4.8rem);
   text-align: center;
+  line-height: 1;
 }
 
 .answer-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: clamp(8px, 2vw, 14px);
 }
 
 .answer-button {
-  min-height: 78px;
+  min-height: clamp(64px, 10vh, 92px);
   padding: 12px;
-  font-size: clamp(1.8rem, 7vw, 3rem);
+  font-size: clamp(1.65rem, 7vw, 3rem);
 }
 
 .answer-button.correct {
@@ -320,7 +491,7 @@ button:disabled {
 
 .message {
   color: var(--ink);
-  font-size: 1.3rem;
+  font-size: clamp(1.08rem, 3vw, 1.35rem);
 }
 
 .review-list {

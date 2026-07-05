@@ -1,37 +1,78 @@
 # Multiplication Rocket
 
-Multiplication Rocket is a simple browser game for children learning 1x1 to 9x9 multiplication. The child picks a mission level, answers 10 questions, earns stars, gets hints, reviews mistakes, and watches the rocket climb.
+Multiplication Rocket is a cheerful browser game for children learning 1x1 to 9x9 multiplication. The child picks a mission level, answers 10 questions, earns stars, gets hints, reviews mistakes, and watches a rocket launch higher with each correct answer.
 
 The project is static and GitHub Pages friendly. It uses only HTML5, CSS3, and vanilla JavaScript. There is no backend, login, database, npm, build tool, CDN, or paid API.
 
 ## Features
 
-- Easy, Medium, and Hard levels
+- Easy, Medium, and Hard multiplication levels
 - Score, timer, hints, encouraging messages, and wrong-answer review
-- Rocket and star animation with `prefers-reduced-motion` support
-- Saves best score, total stars, wrong questions, weak tables, and last played date in `localStorage`
+- Responsive layout for iPhone, iPad, Android phones/tablets, Windows, and macOS browsers
+- Vivid SVG rocket with idle, correct-answer, wrong-answer, and completion animations
+- Flame, smoke, sparkles, clouds, moon, and celebration effects
+- Sound effects for button taps, correct answers, wrong answers, rocket boost, completion, and perfect score
+- Optional soft background music generated with the Web Audio API
+- Sound and music toggles saved in `localStorage`
+- Progress saved in `localStorage`: best score, total stars, wrong questions, weak tables, and last played date
 - Installable Progressive Web App on iPad and supported desktop/mobile browsers
 - Offline support after the first successful load
 - Relative paths for GitHub Pages subfolder deployment
+- `prefers-reduced-motion` support
+
+## Browser Compatibility
+
+Test targets:
+
+- iPad Safari
+- iPhone Safari
+- Android Chrome
+- Windows Chrome and Edge
+- macOS Safari and Chrome
+
+The layout uses responsive CSS, Flexbox, CSS Grid, `clamp()`, safe-area `env()` values, and touch-friendly controls with minimum 60px gameplay buttons.
 
 ## Folder Structure
 
 ```text
 /
-├── index.html
-├── manifest.json
-├── service-worker.js
-├── offline.html
-├── 404.html
-├── README.md
-├── LICENSE
-├── robots.txt
-├── .nojekyll
-├── css/
-├── js/
-├── assets/
-└── docs/
+|-- index.html
+|-- manifest.json
+|-- service-worker.js
+|-- offline.html
+|-- 404.html
+|-- README.md
+|-- LICENSE
+|-- robots.txt
+|-- .nojekyll
+|-- css/
+|   |-- style.css
+|   |-- responsive.css
+|   `-- animations.css
+|-- js/
+|   |-- app.js
+|   |-- game.js
+|   |-- ui.js
+|   |-- questions.js
+|   |-- storage.js
+|   |-- audio.js
+|   |-- animation.js
+|   `-- utils.js
+|-- assets/
+|   |-- icons/
+|   |-- images/
+|   `-- sounds/
+`-- docs/
 ```
+
+## Sound Controls
+
+The game uses small Web Audio API tones instead of external audio files. This keeps the project offline-friendly and avoids licensing issues.
+
+- `Sound On/Off` controls effects.
+- `Music On/Off` controls soft looping background music.
+- Audio starts only after a user interaction, which respects iOS and Android autoplay rules.
+- Preferences are saved automatically in `localStorage`.
 
 ## Run Locally
 
@@ -43,7 +84,11 @@ Optional local server:
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000/`.
+Then open:
+
+```text
+http://localhost:8000/
+```
 
 ## Upload To GitHub
 
@@ -91,5 +136,6 @@ https://username.github.io/MultiplicationRocket/
 
 - If offline mode does not work, reload once while online and wait a few seconds.
 - If the Home Screen icon does not appear, confirm Safari is using the GitHub Pages `https://` URL.
+- If sound does not play, tap anywhere in the game first; mobile browsers require user interaction before audio.
 - If old files appear after an update, close the tab or Home Screen app and reopen it. The service worker deletes old named caches during activation.
 - If progress is missing, check whether Safari private browsing or storage restrictions are enabled.

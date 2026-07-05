@@ -1,4 +1,4 @@
-const CACHE_NAME = "multiplication-rocket-v1.0.0";
+const CACHE_NAME = "multiplication-rocket-v1.1.0";
 const BASE_URL = self.registration.scope;
 
 const REQUIRED_ASSETS = [
@@ -13,10 +13,15 @@ const REQUIRED_ASSETS = [
   "./js/utils.js",
   "./js/storage.js",
   "./js/questions.js",
+  "./js/audio.js",
   "./js/animation.js",
   "./js/ui.js",
   "./js/game.js",
   "./js/app.js",
+  "./assets/images/rocket.svg",
+  "./assets/images/smoke.svg",
+  "./assets/images/stars.svg",
+  "./assets/images/clouds.svg",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   "./assets/icons/apple-touch-icon.png",
@@ -75,7 +80,8 @@ function cacheAssets(cache, paths) {
 }
 
 function acceptsHtml(request) {
-  return request.headers.get("accept")?.includes("text/html");
+  const acceptHeader = request.headers.get("accept");
+  return Boolean(acceptHeader && acceptHeader.includes("text/html"));
 }
 
 async function networkFirstHtml(request) {

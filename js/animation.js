@@ -8,8 +8,7 @@
 
     const safeProgress = Math.max(0, Math.min(1, progressRatio));
     rocketElement.style.bottom = `${10 + safeProgress * 72}%`;
-    rocketElement.classList.remove("rocket-boost");
-    window.requestAnimationFrame(() => rocketElement.classList.add("rocket-boost"));
+    rocketElement.style.setProperty("--rocket-progress", safeProgress);
   }
 
   function pulse(element) {
@@ -19,9 +18,27 @@
     window.requestAnimationFrame(() => element.classList.add("pulse"));
   }
 
+  function setRocketState(rocketElement, stateName) {
+    if (!rocketElement) return;
+
+    const rocketArea = rocketElement.closest(".rocket-area");
+    rocketElement.classList.remove("is-idle", "is-correct", "is-wrong", "is-complete");
+    if (rocketArea) {
+      rocketArea.classList.remove("is-idle", "is-correct", "is-wrong", "is-complete");
+    }
+
+    window.requestAnimationFrame(() => {
+      rocketElement.classList.add(`is-${stateName}`);
+      if (rocketArea) {
+        rocketArea.classList.add(`is-${stateName}`);
+      }
+    });
+  }
+
   RocketMath.animation = {
     moveRocket,
-    pulse
+    pulse,
+    setRocketState
   };
 
   window.RocketMath = RocketMath;

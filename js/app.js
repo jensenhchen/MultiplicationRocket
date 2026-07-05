@@ -8,24 +8,48 @@
     const progress = RocketMath.storage.loadProgress();
 
     RocketMath.game.init(progress);
+    ui.updateAudioButtons(RocketMath.audio.getSettings());
     bindEvents();
     registerServiceWorker();
   }
 
   function bindEvents() {
     ui.elements.levelButtons.forEach((button) => {
-      button.addEventListener("click", () => RocketMath.game.start(button.dataset.level));
+      button.addEventListener("click", () => {
+        RocketMath.audio.unlock();
+        RocketMath.audio.play("click");
+        RocketMath.game.start(button.dataset.level);
+      });
     });
 
     ui.elements.answerButtons.addEventListener("click", (event) => {
       const button = event.target.closest(".answer-button");
       if (!button) return;
+      RocketMath.audio.unlock();
+      RocketMath.audio.play("click");
       RocketMath.game.answer(button.textContent);
     });
 
-    ui.elements.hintButton.addEventListener("click", RocketMath.game.showHint);
-    ui.elements.playAgainButton.addEventListener("click", RocketMath.game.showStart);
+    ui.elements.hintButton.addEventListener("click", () => {
+      RocketMath.audio.play("click");
+      RocketMath.game.showHint();
+    });
+    ui.elements.playAgainButton.addEventListener("click", () => {
+      RocketMath.audio.play("click");
+      RocketMath.game.showStart();
+    });
+    ui.elements.soundToggle.addEventListener("click", () => {
+      RocketMath.audio.unlock();
+      RocketMath.audio.toggleSound();
+      ui.updateAudioButtons(RocketMath.audio.getSettings());
+    });
+    ui.elements.musicToggle.addEventListener("click", () => {
+      RocketMath.audio.unlock();
+      RocketMath.audio.toggleMusic();
+      ui.updateAudioButtons(RocketMath.audio.getSettings());
+    });
     ui.elements.resetProgressButton.addEventListener("click", () => {
+      RocketMath.audio.play("click");
       RocketMath.game.resetProgress();
       ui.showMessage("Progress reset. Ready for a fresh launch!");
     });

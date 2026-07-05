@@ -29,6 +29,10 @@
         <h1>Multiplication Rocket</h1>
         <p>Practice times tables and launch your rocket to the stars.</p>
       </div>
+      <div class="hero-controls" aria-label="Sound controls">
+        <button id="sound-toggle" class="icon-toggle" type="button" aria-pressed="true">Sound On</button>
+        <button id="music-toggle" class="icon-toggle" type="button" aria-pressed="false">Music Off</button>
+      </div>
     </header>
 
     <section id="start-screen" class="panel" aria-labelledby="start-title">
@@ -66,10 +70,47 @@
       </div>
 
       <div class="rocket-area" aria-hidden="true">
+        <div class="cloud cloud-one"></div>
+        <div class="cloud cloud-two"></div>
         <div class="sky-mark star-one">&#9733;</div>
         <div class="sky-mark star-two">&#9733;</div>
         <div class="sky-mark star-three">&#9733;</div>
-        <div id="rocket">&#128640;</div>
+        <div id="rocket" class="rocket-wrap">
+          <svg class="rocket-svg" viewBox="0 0 120 180" role="img" aria-label="Rocket">
+            <g class="rocket-glow">
+              <ellipse cx="60" cy="92" rx="34" ry="66"></ellipse>
+            </g>
+            <g class="rocket-body">
+              <path class="fin left-fin" d="M39 116 L15 152 L45 142 Z"></path>
+              <path class="fin right-fin" d="M81 116 L105 152 L75 142 Z"></path>
+              <path class="body-shell" d="M60 8 C30 33 25 85 39 129 C44 145 76 145 81 129 C95 85 90 33 60 8 Z"></path>
+              <circle class="window-ring" cx="60" cy="66" r="18"></circle>
+              <circle class="window-glass" cx="60" cy="66" r="11"></circle>
+              <path class="smile" d="M51 99 Q60 108 69 99"></path>
+              <path class="oops-mouth" d="M53 104 Q60 96 67 104"></path>
+            </g>
+            <g class="flame">
+              <path class="flame-outer" d="M43 139 C45 162 58 174 60 178 C62 174 75 162 77 139 Z"></path>
+              <path class="flame-inner" d="M53 140 C54 156 60 165 60 168 C60 165 66 156 67 140 Z"></path>
+            </g>
+            <g class="smoke-trail">
+              <circle cx="42" cy="160" r="9"></circle>
+              <circle cx="60" cy="166" r="12"></circle>
+              <circle cx="78" cy="160" r="8"></circle>
+            </g>
+            <g class="sparkles">
+              <circle cx="23" cy="70" r="3"></circle>
+              <circle cx="98" cy="92" r="3"></circle>
+              <circle cx="31" cy="121" r="2.5"></circle>
+              <circle cx="92" cy="34" r="2.5"></circle>
+            </g>
+          </svg>
+          <span class="oops-bubble">Oops!</span>
+        </div>
+        <div class="moon" aria-hidden="true"></div>
+        <div class="fireworks" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
       </div>
 
       <h2 id="question-text" class="question"></h2>
@@ -98,6 +139,7 @@
   <script src="./js/utils.js"></script>
   <script src="./js/storage.js"></script>
   <script src="./js/questions.js"></script>
+  <script src="./js/audio.js"></script>
   <script src="./js/animation.js"></script>
   <script src="./js/ui.js"></script>
   <script src="./js/game.js"></script>

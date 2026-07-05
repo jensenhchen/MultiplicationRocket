@@ -7,9 +7,9 @@
   const ANSWER_DELAY_MS = 1000;
 
   const encouragements = [
-    "Great job!",
-    "You got it!",
-    "Brilliant!",
+    "Stars! Great Job!",
+    "Rocket boost! Awesome!",
+    "Fantastic!",
     "Rocket boost!",
     "Keep flying!",
     "Nice thinking!"
@@ -47,6 +47,7 @@
     updateTimer();
     RocketMath.ui.updateScore(state.score);
     RocketMath.animation.moveRocket(RocketMath.ui.elements.rocket, 0);
+    RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "idle");
     RocketMath.ui.showScreen("game");
     nextQuestion();
   }
@@ -68,6 +69,7 @@
       TOTAL_QUESTIONS,
       state.score
     );
+    RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "idle");
   }
 
   function answer(chosenAnswer) {
@@ -87,9 +89,14 @@
         RocketMath.ui.elements.rocket,
         state.score / (TOTAL_QUESTIONS * POINTS_PER_CORRECT)
       );
+      RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "correct");
+      RocketMath.audio.play("correct");
+      RocketMath.audio.play("boost");
       RocketMath.ui.showMessage(encouragements[RocketMath.utils.randomNumber(0, encouragements.length - 1)]);
     } else {
-      RocketMath.ui.showMessage(`Nice try. The answer is ${state.currentQuestion.answer}.`);
+      RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "wrong");
+      RocketMath.audio.play("wrong");
+      RocketMath.ui.showMessage(`Good try! The answer is ${state.currentQuestion.answer}.`);
       state.wrongAnswers.push({
         question: `${state.currentQuestion.first} x ${state.currentQuestion.second}`,
         correct: state.currentQuestion.answer,
@@ -119,6 +126,8 @@
     };
 
     state.progress = RocketMath.storage.recordGameResult(state.progress, result);
+    RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "complete");
+    RocketMath.audio.play(state.score === TOTAL_QUESTIONS * POINTS_PER_CORRECT ? "applause" : "complete");
     RocketMath.ui.renderResult(result, state.progress);
     RocketMath.ui.renderProgress(state.progress);
     RocketMath.ui.showScreen("result");

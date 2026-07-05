@@ -4,9 +4,13 @@
 
 - Open `index.html` in Chrome, Edge, Firefox, and Safari where available.
 - Confirm the start screen loads with Easy, Medium, and Hard buttons.
+- Confirm there is no horizontal scrolling at 320px, 375px, 390px, 430px, 768px, 1024px, and desktop widths.
 - Start each level and confirm questions stay within the correct table range.
 - Answer correctly and confirm score increases by 10.
 - Answer incorrectly and confirm the correct answer is shown.
+- Confirm the rocket idles, boosts on correct answers, shakes on wrong answers, and celebrates at mission complete.
+- Confirm sound effects play only after the first user interaction.
+- Confirm Sound On/Off and Music On/Off toggles work.
 - Finish a mission and confirm score, best score, time, and review display.
 - Use keyboard number keys to select visible single-digit answers.
 - Confirm there are no browser console errors.
@@ -19,6 +23,7 @@
 - Confirm Safari safe areas do not cover content.
 - Play a full mission in portrait.
 - Play a full mission in landscape.
+- Confirm the Sound and Music settings persist after closing and reopening the Home Screen app.
 
 ## Add To Home Screen Test
 
@@ -58,5 +63,6 @@
 - Return to the start screen.
 - Confirm best score, total stars, and last played date are shown.
 - Confirm weak table badges appear after wrong answers.
+- Toggle sound and music settings, reload the page, and confirm the settings are restored.
 - Reload the page and confirm progress is restored.
 - Tap Reset progress and confirm saved progress clears.

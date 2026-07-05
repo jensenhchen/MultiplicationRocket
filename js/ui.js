@@ -10,6 +10,8 @@
     gameScreen: document.querySelector("#game-screen"),
     resultScreen: document.querySelector("#result-screen"),
     levelButtons: document.querySelectorAll("[data-level]"),
+    soundToggle: document.querySelector("#sound-toggle"),
+    musicToggle: document.querySelector("#music-toggle"),
     resetProgressButton: document.querySelector("#reset-progress-button"),
     savedProgress: document.querySelector("#saved-progress"),
     weakTables: document.querySelector("#weak-tables"),
@@ -116,6 +118,15 @@
 
   function showMessage(message) {
     elements.message.textContent = safeText(message);
+    elements.message.classList.remove("message-pop");
+    window.requestAnimationFrame(() => elements.message.classList.add("message-pop"));
+  }
+
+  function updateAudioButtons(settings) {
+    elements.soundToggle.textContent = settings.soundEnabled ? "Sound On" : "Sound Off";
+    elements.soundToggle.setAttribute("aria-pressed", String(settings.soundEnabled));
+    elements.musicToggle.textContent = settings.musicEnabled ? "Music On" : "Music Off";
+    elements.musicToggle.setAttribute("aria-pressed", String(settings.musicEnabled));
   }
 
   function renderResult(result, progress) {
@@ -152,6 +163,7 @@
     markAnswer,
     showHint,
     showMessage,
+    updateAudioButtons,
     renderResult
   };
 
