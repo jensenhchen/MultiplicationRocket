@@ -1,0 +1,75 @@
+#rocket {
+  transition: bottom 450ms ease;
+}
+
+.rocket-boost {
+  animation: rocket-wiggle 450ms ease;
+}
+
+.pulse {
+  animation: soft-pulse 320ms ease;
+}
+
+.sky-mark {
+  animation: star-twinkle 2.4s ease-in-out infinite;
+}
+
+.star-two {
+  animation-delay: 550ms;
+}
+
+.star-three {
+  animation-delay: 1100ms;
+}
+
+@keyframes rocket-wiggle {
+  0% {
+    transform: translateX(-50%) rotate(-18deg) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) rotate(-10deg) scale(1.08);
+  }
+
+  100% {
+    transform: translateX(-50%) rotate(-18deg) scale(1);
+  }
+}
+
+@keyframes soft-pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,89 @@
+@media (max-width: 720px) {
+  .game-shell {
+    padding:
+      max(14px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
+  }
+
+  .hero {
+    align-items: flex-start;
+  }
+
+  .rocket-badge {
+    flex-basis: 58px;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    font-size: 2.2rem;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .screen-heading {
+    display: block;
+  }
+
+  .text-button {
+    margin-top: 10px;
+  }
+
+  .level-grid,
+  .stats,
+  .result-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .level-card {
+    min-height: 92px;
+  }
+
+  .rocket-area {
+    height: 170px;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1180px) {
+  .game-shell {
+    width: min(880px, 100%);
+  }
+
+  .panel {
+    padding: 28px;
+  }
+
+  .answer-button {
+    min-height: 96px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 760px) {
+  .game-shell {
+    width: min(980px, 100%);
+  }
+
+  .hero {
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    display: none;
+  }
+
+  .rocket-area {
+    height: 135px;
+    margin: 10px 0;
+  }
+
+  .question {
+    margin: 10px 0;
+    font-size: clamp(2rem, 8vw, 3.6rem);
+  }
+
+  .answer-button {
+    min-height: 68px;
+  }
+}
