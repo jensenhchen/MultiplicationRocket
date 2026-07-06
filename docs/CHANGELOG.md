@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 - 2026-07-07
+
+- Added highlighted result states for practice rounds using color and animation.
+- Added improvement messages comparing each practice with the previous group result.
+- Added distinct result sounds for improvement and competition wins.
+- Added color-coded competition result panels.
+- Updated service worker cache for the new result-highlighting behavior.
+
 ## 1.2.0 - 2026-07-07
 
 - Added Group 1 `CXY` for original Easy, Medium, and Hard levels.

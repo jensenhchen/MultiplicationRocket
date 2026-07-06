@@ -28,6 +28,7 @@
     hintText: document.querySelector("#hint-text"),
     message: document.querySelector("#message"),
     resultMessage: document.querySelector("#result-message"),
+    improvementMessage: document.querySelector("#improvement-message"),
     finalScore: document.querySelector("#final-score"),
     bestScore: document.querySelector("#best-score"),
     finalCorrect: document.querySelector("#final-correct"),
@@ -154,12 +155,15 @@
   }
 
   function renderResult(result, progress) {
+    elements.resultScreen.classList.remove("result-perfect", "result-improved", "result-strong", "result-practice");
+    elements.resultScreen.classList.add(`result-${result.resultTone}`);
     elements.finalScore.textContent = result.score;
     elements.bestScore.textContent = progress.bestScore;
     elements.finalCorrect.textContent = `${result.correctCount}/${result.totalQuestions}`;
     elements.finalRate.textContent = `${result.correctionRate}%`;
     elements.finalTime.textContent = result.elapsedSeconds;
     elements.resultMessage.textContent = result.message;
+    renderImprovement(result.improvement, result.resultTone);
     elements.competitionResult.classList.add("hidden");
     elements.competitionNextButton.classList.add("hidden");
     elements.wrongReview.innerHTML = "";
@@ -180,8 +184,29 @@
     });
   }
 
+  function renderImprovement(improvement, resultTone) {
+    elements.improvementMessage.classList.remove("hidden", "is-improved", "is-steady", "is-first");
+
+    if (!improvement) {
+      elements.improvementMessage.classList.add("hidden");
+      return;
+    }
+
+    if (improvement.isFirstRun) {
+      elements.improvementMessage.classList.add("is-first");
+    } else if (improvement.improvedRate || improvement.improvedTime || resultTone === "perfect") {
+      elements.improvementMessage.classList.add("is-improved");
+    } else {
+      elements.improvementMessage.classList.add("is-steady");
+    }
+
+    elements.improvementMessage.textContent = improvement.message;
+  }
+
   function renderCompetitionPrompt(currentResult) {
     elements.competitionResult.classList.remove("hidden");
+    elements.competitionResult.classList.remove("competition-win", "competition-draw");
+    elements.competitionResult.classList.add("competition-next");
     elements.competitionResult.innerHTML = `<p>CXY finished: ${currentResult.correctCount}/${currentResult.totalQuestions}, ${currentResult.correctionRate}%, ${currentResult.elapsedSeconds}s.</p><p>Now let CXR take a turn.</p>`;
     elements.competitionNextButton.classList.remove("hidden");
     elements.competitionNextButton.textContent = "Start CXR turn";
@@ -189,6 +214,8 @@
 
   function renderCompetitionResult(comparison) {
     elements.competitionResult.classList.remove("hidden");
+    elements.competitionResult.classList.remove("competition-next", "competition-win", "competition-draw");
+    elements.competitionResult.classList.add(comparison.tone === "draw" ? "competition-draw" : "competition-win");
     elements.competitionNextButton.classList.add("hidden");
     elements.competitionResult.innerHTML = [
       `<p><strong>Competition result:</strong> ${comparison.winner}</p>`,

@@ -87,6 +87,17 @@
         { frequency: 659, duration: 0.09, type: "sine", volume: 0.05, delay: 0.09 },
         { frequency: 784, duration: 0.14, type: "sine", volume: 0.055, delay: 0.18 }
       ],
+      improve: [
+        { frequency: 587, duration: 0.08, type: "sine", volume: 0.05 },
+        { frequency: 740, duration: 0.08, type: "sine", volume: 0.052, delay: 0.08 },
+        { frequency: 988, duration: 0.16, type: "triangle", volume: 0.055, delay: 0.17 }
+      ],
+      win: [
+        { frequency: 523, duration: 0.07, type: "triangle", volume: 0.05 },
+        { frequency: 659, duration: 0.07, type: "triangle", volume: 0.05, delay: 0.07 },
+        { frequency: 784, duration: 0.07, type: "triangle", volume: 0.05, delay: 0.14 },
+        { frequency: 1047, duration: 0.18, type: "sine", volume: 0.055, delay: 0.23 }
+      ],
       applause: [
         { frequency: 880, duration: 0.06, type: "square", volume: 0.025 },
         { frequency: 990, duration: 0.06, type: "square", volume: 0.025, delay: 0.07 },

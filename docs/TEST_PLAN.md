@@ -14,8 +14,11 @@
 - Confirm Sound On/Off and Music On/Off toggles work.
 - Finish a mission and confirm score, best score, time, and review display.
 - Finish a mission and confirm correct/total and correction rate display.
+- Finish two practice missions in the same group and confirm the second result shows an improvement or encouragement message.
+- Confirm practice results are highlighted with color, animation, and a result sound.
 - Run a full CXY vs CXR competition and confirm CXR starts after CXY.
 - Confirm competition result compares CXY and CXR by accuracy, then time.
+- Confirm competition results are highlighted with color, animation, and a result sound.
 - Use keyboard number keys to select visible single-digit answers.
 - Confirm there are no browser console errors.
 

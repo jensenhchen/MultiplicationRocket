@@ -170,6 +170,7 @@
   function end() {
     clearInterval(state.timerId);
     state.acceptingAnswers = false;
+    const previousGroupStats = { ...state.progress.groupStats[state.groupName] };
 
     const result = {
       score: state.score,
@@ -185,10 +186,12 @@
       playedAt: RocketMath.utils.todayString(),
       message: getResultMessage()
     };
+    result.improvement = buildImprovement(result, previousGroupStats);
+    result.resultTone = getResultTone(result);
 
     state.progress = RocketMath.storage.recordGameResult(state.progress, result);
     RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "complete");
-    RocketMath.audio.play(state.score === TOTAL_QUESTIONS * POINTS_PER_CORRECT ? "applause" : "complete");
+    playResultSound(result);
     RocketMath.ui.renderResult(result, state.progress);
     handleCompetitionResult(result);
     RocketMath.ui.renderProgress(state.progress);
@@ -214,6 +217,7 @@
       cxr: summarizeCompetitionResult(state.competition.cxr)
     });
     RocketMath.ui.renderCompetitionResult(comparison);
+    RocketMath.audio.play(comparison.tone === "draw" ? "complete" : "win");
   }
 
   function compareCompetition(cxy, cxr) {
@@ -229,7 +233,8 @@
       winner = "CXR wins by speed";
     }
 
-    return { winner, cxy, cxr };
+    const tone = winner === "Draw" ? "draw" : "win";
+    return { winner, cxy, cxr, tone };
   }
 
   function summarizeCompetitionResult(result) {
@@ -275,6 +280,93 @@
     }
 
     return "Good effort! Try again and watch your rocket climb higher.";
+  }
+
+  function buildImprovement(result, previousStats) {
+    if (!previousStats || previousStats.gamesPlayed === 0) {
+      return {
+        isFirstRun: true,
+        improvedRate: false,
+        improvedTime: false,
+        rateDelta: 0,
+        timeDelta: 0,
+        message: `First ${result.groupLabel} mission saved. Great start!`
+      };
+    }
+
+    const rateDelta = result.correctionRate - previousStats.lastRate;
+    const timeDelta = previousStats.lastTime - result.elapsedSeconds;
+    const improvedRate = rateDelta > 0;
+    const improvedTime = result.correctCount >= previousStats.lastCorrect && timeDelta > 0;
+
+    if (improvedRate && improvedTime) {
+      return {
+        improvedRate,
+        improvedTime,
+        rateDelta,
+        timeDelta,
+        message: `Big improvement! Accuracy up ${rateDelta}% and ${timeDelta}s faster.`
+      };
+    }
+
+    if (improvedRate) {
+      return {
+        improvedRate,
+        improvedTime,
+        rateDelta,
+        timeDelta,
+        message: `Accuracy improved by ${rateDelta}%. Your brain rocket is getting stronger!`
+      };
+    }
+
+    if (improvedTime) {
+      return {
+        improvedRate,
+        improvedTime,
+        rateDelta,
+        timeDelta,
+        message: `Same or better accuracy, and ${timeDelta}s faster. Nice speed boost!`
+      };
+    }
+
+    if (result.correctionRate === previousStats.lastRate && result.elapsedSeconds === previousStats.lastTime) {
+      return {
+        improvedRate,
+        improvedTime,
+        rateDelta,
+        timeDelta,
+        message: "Steady mission! Try one more round to beat your last result."
+      };
+    }
+
+    return {
+      improvedRate,
+      improvedTime,
+      rateDelta,
+      timeDelta,
+      message: "Good practice. Mistakes show exactly what to train next!"
+    };
+  }
+
+  function getResultTone(result) {
+    if (result.correctionRate === 100) return "perfect";
+    if (result.improvement.improvedRate || result.improvement.improvedTime) return "improved";
+    if (result.correctionRate >= 70) return "strong";
+    return "practice";
+  }
+
+  function playResultSound(result) {
+    if (result.resultTone === "perfect") {
+      RocketMath.audio.play("applause");
+      return;
+    }
+
+    if (result.resultTone === "improved") {
+      RocketMath.audio.play("improve");
+      return;
+    }
+
+    RocketMath.audio.play("complete");
   }
 
   function getMissionLabel() {
