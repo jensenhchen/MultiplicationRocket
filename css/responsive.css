@@ -50,6 +50,9 @@
     margin-top: 10px;
   }
 
+  .group-board,
+  .competition-grid,
+  .group-stats,
   .result-stats {
     grid-template-columns: 1fr;
   }
@@ -60,7 +63,7 @@
   }
 
   .stats {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .level-card {

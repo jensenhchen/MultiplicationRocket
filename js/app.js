@@ -18,7 +18,19 @@
       button.addEventListener("click", () => {
         RocketMath.audio.unlock();
         RocketMath.audio.play("click");
-        RocketMath.game.start(button.dataset.level);
+        RocketMath.game.start({
+          groupName: button.dataset.group,
+          levelName: button.dataset.level,
+          mode: "practice"
+        });
+      });
+    });
+
+    ui.elements.competitionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        RocketMath.audio.unlock();
+        RocketMath.audio.play("click");
+        RocketMath.game.startCompetition(button.dataset.level);
       });
     });
 
@@ -37,6 +49,10 @@
     ui.elements.playAgainButton.addEventListener("click", () => {
       RocketMath.audio.play("click");
       RocketMath.game.showStart();
+    });
+    ui.elements.competitionNextButton.addEventListener("click", () => {
+      RocketMath.audio.play("click");
+      RocketMath.game.startNextCompetitionTurn();
     });
     ui.elements.soundToggle.addEventListener("click", () => {
       RocketMath.audio.unlock();

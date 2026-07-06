@@ -16,15 +16,19 @@
   ];
 
   const state = {
+    groupName: "cxy",
     levelName: "easy",
+    mode: "practice",
     questionNumber: 0,
     score: 0,
+    correctCount: 0,
     currentQuestion: null,
     wrongAnswers: [],
     startTime: 0,
     timerId: null,
     acceptingAnswers: false,
-    progress: null
+    progress: null,
+    competition: null
   };
 
   function init(progress) {
@@ -33,10 +37,15 @@
     RocketMath.ui.showScreen("start");
   }
 
-  function start(levelName) {
-    state.levelName = RocketMath.questions.LEVELS[levelName] ? levelName : "easy";
+  function start(options) {
+    const mission = normalizeStartOptions(options);
+
+    state.groupName = mission.groupName;
+    state.levelName = mission.levelName;
+    state.mode = mission.mode;
     state.questionNumber = 0;
     state.score = 0;
+    state.correctCount = 0;
     state.wrongAnswers = [];
     state.currentQuestion = null;
     state.acceptingAnswers = false;
@@ -52,6 +61,48 @@
     nextQuestion();
   }
 
+  function normalizeStartOptions(options) {
+    if (typeof options === "string") {
+      return {
+        groupName: "cxy",
+        levelName: RocketMath.questions.GROUPS.cxy.levels[options] ? options : "easy",
+        mode: "practice"
+      };
+    }
+
+    const groupName = RocketMath.questions.GROUPS[options.groupName] ? options.groupName : "cxy";
+    const levelName = RocketMath.questions.GROUPS[groupName].levels[options.levelName] ? options.levelName : "easy";
+    return {
+      groupName,
+      levelName,
+      mode: options.mode === "competition" ? "competition" : "practice"
+    };
+  }
+
+  function startCompetition(levelName) {
+    state.competition = {
+      levelName: RocketMath.questions.GROUPS.cxy.levels[levelName] ? levelName : "easy",
+      cxy: null,
+      cxr: null
+    };
+
+    start({
+      groupName: "cxy",
+      levelName: state.competition.levelName,
+      mode: "competition"
+    });
+  }
+
+  function startNextCompetitionTurn() {
+    if (!state.competition || !state.competition.cxy) return;
+
+    start({
+      groupName: "cxr",
+      levelName: state.competition.levelName,
+      mode: "competition"
+    });
+  }
+
   function nextQuestion() {
     state.questionNumber += 1;
 
@@ -60,14 +111,15 @@
       return;
     }
 
-    state.currentQuestion = RocketMath.questions.createQuestion(state.levelName);
+    state.currentQuestion = RocketMath.questions.createQuestion(state.groupName, state.levelName);
     state.acceptingAnswers = true;
 
     RocketMath.ui.renderQuestion(
       state.currentQuestion,
       state.questionNumber,
       TOTAL_QUESTIONS,
-      state.score
+      state.score,
+      getMissionLabel()
     );
     RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "idle");
   }
@@ -84,6 +136,7 @@
 
     if (isCorrect) {
       state.score += POINTS_PER_CORRECT;
+      state.correctCount += 1;
       RocketMath.ui.updateScore(state.score);
       RocketMath.animation.moveRocket(
         RocketMath.ui.elements.rocket,
@@ -101,7 +154,8 @@
         question: `${state.currentQuestion.first} x ${state.currentQuestion.second}`,
         correct: state.currentQuestion.answer,
         chosen: answerNumber,
-        table: state.currentQuestion.table
+        table: state.currentQuestion.table,
+        group: state.groupName
       });
     }
 
@@ -119,6 +173,13 @@
 
     const result = {
       score: state.score,
+      groupName: state.groupName,
+      groupLabel: RocketMath.questions.getGroup(state.groupName).name,
+      levelName: state.levelName,
+      levelLabel: RocketMath.questions.getLevel(state.groupName, state.levelName).label,
+      correctCount: state.correctCount,
+      totalQuestions: TOTAL_QUESTIONS,
+      correctionRate: Math.round((state.correctCount / TOTAL_QUESTIONS) * 100),
       elapsedSeconds: getElapsedSeconds(),
       wrongAnswers: state.wrongAnswers,
       playedAt: RocketMath.utils.todayString(),
@@ -129,8 +190,56 @@
     RocketMath.animation.setRocketState(RocketMath.ui.elements.rocket, "complete");
     RocketMath.audio.play(state.score === TOTAL_QUESTIONS * POINTS_PER_CORRECT ? "applause" : "complete");
     RocketMath.ui.renderResult(result, state.progress);
+    handleCompetitionResult(result);
     RocketMath.ui.renderProgress(state.progress);
     RocketMath.ui.showScreen("result");
+  }
+
+  function handleCompetitionResult(result) {
+    if (state.mode !== "competition" || !state.competition) return;
+
+    if (state.groupName === "cxy") {
+      state.competition.cxy = result;
+      RocketMath.ui.renderCompetitionPrompt(result);
+      return;
+    }
+
+    state.competition.cxr = result;
+    const comparison = compareCompetition(state.competition.cxy, state.competition.cxr);
+    state.progress = RocketMath.storage.recordCompetition(state.progress, {
+      playedAt: result.playedAt,
+      levelName: state.competition.levelName,
+      winner: comparison.winner,
+      cxy: summarizeCompetitionResult(state.competition.cxy),
+      cxr: summarizeCompetitionResult(state.competition.cxr)
+    });
+    RocketMath.ui.renderCompetitionResult(comparison);
+  }
+
+  function compareCompetition(cxy, cxr) {
+    let winner = "Draw";
+
+    if (cxy.correctCount > cxr.correctCount) {
+      winner = "CXY wins by accuracy";
+    } else if (cxr.correctCount > cxy.correctCount) {
+      winner = "CXR wins by accuracy";
+    } else if (cxy.elapsedSeconds < cxr.elapsedSeconds) {
+      winner = "CXY wins by speed";
+    } else if (cxr.elapsedSeconds < cxy.elapsedSeconds) {
+      winner = "CXR wins by speed";
+    }
+
+    return { winner, cxy, cxr };
+  }
+
+  function summarizeCompetitionResult(result) {
+    return {
+      score: result.score,
+      correctCount: result.correctCount,
+      totalQuestions: result.totalQuestions,
+      correctionRate: result.correctionRate,
+      elapsedSeconds: result.elapsedSeconds
+    };
   }
 
   function resetProgress() {
@@ -140,6 +249,8 @@
 
   function showStart() {
     clearInterval(state.timerId);
+    state.mode = "practice";
+    state.competition = null;
     RocketMath.ui.updateTimer(0);
     RocketMath.ui.renderProgress(state.progress);
     RocketMath.ui.showScreen("start");
@@ -166,9 +277,18 @@
     return "Good effort! Try again and watch your rocket climb higher.";
   }
 
+  function getMissionLabel() {
+    const group = RocketMath.questions.getGroup(state.groupName);
+    const level = RocketMath.questions.getLevel(state.groupName, state.levelName);
+    const prefix = state.mode === "competition" ? "Compete" : "Practice";
+    return `${prefix}: ${group.name} ${level.label}`;
+  }
+
   RocketMath.game = {
     init,
     start,
+    startCompetition,
+    startNextCompetitionTurn,
     answer,
     showHint,
     resetProgress,

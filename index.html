@@ -44,26 +44,63 @@
         <button id="reset-progress-button" class="text-button" type="button">Reset progress</button>
       </div>
 
-      <div class="level-grid" role="group" aria-label="Choose difficulty level">
-        <button class="level-card" type="button" data-level="easy" aria-label="Easy level, tables 1 to 5">
-          <span>Easy</span>
-          <small>Tables 1 to 5</small>
-        </button>
-        <button class="level-card" type="button" data-level="medium" aria-label="Medium level, tables 1 to 7">
-          <span>Medium</span>
-          <small>Tables 1 to 7</small>
-        </button>
-        <button class="level-card" type="button" data-level="hard" aria-label="Hard level, tables 1 to 9">
-          <span>Hard</span>
-          <small>Tables 1 to 9</small>
-        </button>
+      <div class="group-board">
+        <article class="mission-group" aria-labelledby="cxy-title">
+          <h3 id="cxy-title">Group 1: CXY</h3>
+          <p>Practice 1 x 1 to 9 x 9.</p>
+          <div class="level-grid" role="group" aria-label="CXY difficulty levels">
+            <button class="level-card" type="button" data-group="cxy" data-level="easy" data-mode="practice" aria-label="CXY Easy level, tables 1 to 5">
+              <span>Easy</span>
+              <small>Tables 1 to 5</small>
+            </button>
+            <button class="level-card" type="button" data-group="cxy" data-level="medium" data-mode="practice" aria-label="CXY Medium level, tables 1 to 7">
+              <span>Medium</span>
+              <small>Tables 1 to 7</small>
+            </button>
+            <button class="level-card" type="button" data-group="cxy" data-level="hard" data-mode="practice" aria-label="CXY Hard level, tables 1 to 9">
+              <span>Hard</span>
+              <small>Tables 1 to 9</small>
+            </button>
+          </div>
+        </article>
+
+        <article class="mission-group" aria-labelledby="cxr-title">
+          <h3 id="cxr-title">Group 2: CXR</h3>
+          <p>Practice 11 x 11 to 20 x 20.</p>
+          <div class="level-grid" role="group" aria-label="CXR difficulty levels">
+            <button class="level-card" type="button" data-group="cxr" data-level="easy" data-mode="practice" aria-label="CXR Easy level, tables 11 to 13">
+              <span>Easy</span>
+              <small>Tables 11 to 13</small>
+            </button>
+            <button class="level-card" type="button" data-group="cxr" data-level="medium" data-mode="practice" aria-label="CXR Medium level, tables 11 to 16">
+              <span>Medium</span>
+              <small>Tables 11 to 16</small>
+            </button>
+            <button class="level-card" type="button" data-group="cxr" data-level="hard" data-mode="practice" aria-label="CXR Hard level, tables 11 to 20">
+              <span>Hard</span>
+              <small>Tables 11 to 20</small>
+            </button>
+          </div>
+        </article>
       </div>
 
+      <section class="competition-panel" aria-labelledby="competition-title">
+        <h3 id="competition-title">CXY vs CXR Competition</h3>
+        <p>CXY plays first, then CXR plays the matching level. Fast and accurate wins.</p>
+        <div class="competition-grid" role="group" aria-label="Competition difficulty">
+          <button class="competition-card" type="button" data-level="easy" data-mode="competition">Compete Easy</button>
+          <button class="competition-card" type="button" data-level="medium" data-mode="competition">Compete Medium</button>
+          <button class="competition-card" type="button" data-level="hard" data-mode="competition">Compete Hard</button>
+        </div>
+      </section>
+
+      <div id="group-stats" class="group-stats" aria-live="polite"></div>
       <div id="weak-tables" class="weak-tables" aria-live="polite"></div>
     </section>
 
     <section id="game-screen" class="panel hidden" aria-labelledby="question-text">
       <div class="stats" aria-label="Game progress">
+        <div><span>Mission</span><strong id="mission-label">CXY</strong></div>
         <div><span>Question</span><strong><span id="question-number">1</span>/10</strong></div>
         <div><span>Stars</span><strong id="score">0</strong></div>
         <div><span>Time</span><strong><span id="timer">0</span>s</strong></div>
@@ -127,11 +164,15 @@
       <div class="result-stats">
         <div><span>Stars earned</span><strong id="final-score"></strong></div>
         <div><span>Best score</span><strong id="best-score"></strong></div>
+        <div><span>Correct</span><strong id="final-correct"></strong></div>
+        <div><span>Rate</span><strong id="final-rate"></strong></div>
         <div><span>Time</span><strong><span id="final-time"></span>s</strong></div>
       </div>
 
+      <div id="competition-result" class="competition-result hidden"></div>
       <h3>Practice review</h3>
       <div id="wrong-review" class="review-list"></div>
+      <button id="competition-next-button" class="hidden" type="button">Start CXR turn</button>
       <button id="play-again-button" type="button">Play again</button>
     </section>
   </main>

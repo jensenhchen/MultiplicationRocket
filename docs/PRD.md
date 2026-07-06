@@ -2,7 +2,7 @@
 
 ## Product
 
-Multiplication Rocket is a static browser game that helps a 7-year-old child practice multiplication facts from 1x1 to 9x9.
+Multiplication Rocket is a static browser game that helps a child practice multiplication facts from 1x1 to 20x20 across two named groups.
 
 ## Goals
 
@@ -18,19 +18,32 @@ Multiplication Rocket is a static browser game that helps a 7-year-old child pra
 
 ## Core Gameplay
 
-- Child chooses Easy, Medium, or Hard.
+- Child chooses CXY or CXR, then Easy, Medium, or Hard.
+- Child can choose CXY vs CXR competition mode.
 - Game asks 10 multiplication questions.
 - Child picks one of four answers.
 - Correct answers earn 10 stars.
 - Incorrect answers show the right answer and appear in review.
-- Hints explain multiplication as repeated addition.
+- Hints explain multiplication as repeated addition or a 10-group shortcut for larger tables.
 - Rocket moves upward as the score increases.
+- Results show time, correct/total, and correction rate.
 
-## Levels
+## Groups And Levels
 
-- Easy: tables 1 to 5
-- Medium: tables 1 to 7
-- Hard: tables 1 to 9
+- CXY Easy: tables 1 to 5
+- CXY Medium: tables 1 to 7
+- CXY Hard: tables 1 to 9
+- CXR Easy: tables 11 to 13
+- CXR Medium: tables 11 to 16
+- CXR Hard: tables 11 to 20
+
+## Competition
+
+- CXY plays first.
+- CXR plays second with the same difficulty.
+- Higher correct count wins.
+- If correct count is tied, faster time wins.
+- Competition history is saved locally.
 
 ## Persistence
 
@@ -40,6 +53,8 @@ Use `localStorage` to save:
 - Total stars earned
 - Wrong questions
 - Weak multiplication tables
+- Group stats for CXY and CXR
+- Competition history
 - Last played date
 - Games played
 

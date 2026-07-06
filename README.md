@@ -1,12 +1,14 @@
 # Multiplication Rocket
 
-Multiplication Rocket is a cheerful browser game for children learning 1x1 to 9x9 multiplication. The child picks a mission level, answers 10 questions, earns stars, gets hints, reviews mistakes, and watches a rocket launch higher with each correct answer.
+Multiplication Rocket is a cheerful browser game for children learning multiplication. The child picks a group and mission level, answers 10 questions, earns stars, gets hints, reviews mistakes, and watches a rocket launch higher with each correct answer.
 
 The project is static and GitHub Pages friendly. It uses only HTML5, CSS3, and vanilla JavaScript. There is no backend, login, database, npm, build tool, CDN, or paid API.
 
 ## Features
 
-- Easy, Medium, and Hard multiplication levels
+- Group 1 `CXY` with Easy, Medium, and Hard levels for 1x1 to 9x9 practice
+- Group 2 `CXR` with Easy, Medium, and Hard levels for 11x11 to 20x20 practice
+- CXY vs CXR competition mode with side-by-side result comparison
 - Score, timer, hints, encouraging messages, and wrong-answer review
 - Responsive layout for iPhone, iPad, Android phones/tablets, Windows, and macOS browsers
 - Vivid SVG rocket with idle, correct-answer, wrong-answer, and completion animations
@@ -14,7 +16,7 @@ The project is static and GitHub Pages friendly. It uses only HTML5, CSS3, and v
 - Sound effects for button taps, correct answers, wrong answers, rocket boost, completion, and perfect score
 - Optional soft background music generated with the Web Audio API
 - Sound and music toggles saved in `localStorage`
-- Progress saved in `localStorage`: best score, total stars, wrong questions, weak tables, and last played date
+- Progress saved in `localStorage`: best score, total stars, wrong questions, weak tables, group stats, competition history, and last played date
 - Installable Progressive Web App on iPad and supported desktop/mobile browsers
 - Offline support after the first successful load
 - Relative paths for GitHub Pages subfolder deployment
@@ -73,6 +75,27 @@ The game uses small Web Audio API tones instead of external audio files. This ke
 - `Music On/Off` controls soft looping background music.
 - Audio starts only after a user interaction, which respects iOS and Android autoplay rules.
 - Preferences are saved automatically in `localStorage`.
+
+## Groups And Competition
+
+Practice groups:
+
+- `CXY`: original multiplication practice.
+  - Easy: 1 to 5
+  - Medium: 1 to 7
+  - Hard: 1 to 9
+- `CXR`: larger multiplication practice.
+  - Easy: 11 to 13
+  - Medium: 11 to 16
+  - Hard: 11 to 20
+
+Competition mode:
+
+1. Choose `Compete Easy`, `Compete Medium`, or `Compete Hard`.
+2. CXY plays first.
+3. CXR plays second with the matching difficulty.
+4. The game compares correct answers, correction rate, and time.
+5. Higher accuracy wins. If accuracy is tied, the faster time wins.
 
 ## Run Locally
 

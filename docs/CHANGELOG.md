@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0 - 2026-07-07
+
+- Added Group 1 `CXY` for original Easy, Medium, and Hard levels.
+- Added Group 2 `CXR` for 11x11 to 20x20 multiplication practice.
+- Added CXR Easy, Medium, and Hard ranges.
+- Added CXY vs CXR competition mode.
+- Added per-group time, correct/total, and correction-rate tracking.
+- Added competition result comparison and saved competition history.
+- Updated start screen, result screen, README, and test plan for group play.
+
 ## 1.1.0 - 2026-07-06
 
 - Improved responsive layout for iPhone, iPad, Android phones/tablets, and desktop browsers.

@@ -9,12 +9,15 @@
     startScreen: document.querySelector("#start-screen"),
     gameScreen: document.querySelector("#game-screen"),
     resultScreen: document.querySelector("#result-screen"),
-    levelButtons: document.querySelectorAll("[data-level]"),
+    levelButtons: document.querySelectorAll("[data-mode='practice']"),
+    competitionButtons: document.querySelectorAll("[data-mode='competition']"),
     soundToggle: document.querySelector("#sound-toggle"),
     musicToggle: document.querySelector("#music-toggle"),
     resetProgressButton: document.querySelector("#reset-progress-button"),
     savedProgress: document.querySelector("#saved-progress"),
+    groupStats: document.querySelector("#group-stats"),
     weakTables: document.querySelector("#weak-tables"),
+    missionLabel: document.querySelector("#mission-label"),
     questionNumber: document.querySelector("#question-number"),
     score: document.querySelector("#score"),
     timer: document.querySelector("#timer"),
@@ -27,8 +30,12 @@
     resultMessage: document.querySelector("#result-message"),
     finalScore: document.querySelector("#final-score"),
     bestScore: document.querySelector("#best-score"),
+    finalCorrect: document.querySelector("#final-correct"),
+    finalRate: document.querySelector("#final-rate"),
     finalTime: document.querySelector("#final-time"),
+    competitionResult: document.querySelector("#competition-result"),
     wrongReview: document.querySelector("#wrong-review"),
+    competitionNextButton: document.querySelector("#competition-next-button"),
     playAgainButton: document.querySelector("#play-again-button")
   };
 
@@ -45,7 +52,23 @@
       : "Ready for your first launch.";
 
     elements.savedProgress.textContent = `Best: ${progress.bestScore} stars. Total stars: ${progress.starsEarned}. ${playedText}`;
+    renderGroupStats(progress);
     renderWeakTables(progress);
+  }
+
+  function renderGroupStats(progress) {
+    elements.groupStats.innerHTML = "";
+    ["cxy", "cxr"].forEach((groupName) => {
+      const stats = progress.groupStats[groupName];
+      const label = groupName.toUpperCase();
+      const averageRate = stats.totalQuestions
+        ? Math.round((stats.totalCorrect / stats.totalQuestions) * 100)
+        : 0;
+      const card = document.createElement("div");
+      card.className = "group-stat-card";
+      card.innerHTML = `<span>${label}</span>${stats.lastCorrect}/${stats.lastTotal || 0} last, ${stats.lastTime || 0}s, ${averageRate}% overall`;
+      elements.groupStats.appendChild(card);
+    });
   }
 
   function renderWeakTables(progress) {
@@ -69,7 +92,8 @@
     });
   }
 
-  function renderQuestion(question, questionNumber, totalQuestions, score) {
+  function renderQuestion(question, questionNumber, totalQuestions, score, missionLabel) {
+    elements.missionLabel.textContent = missionLabel;
     elements.questionNumber.textContent = questionNumber;
     elements.questionText.textContent = question.text;
     elements.score.textContent = score;
@@ -132,8 +156,12 @@
   function renderResult(result, progress) {
     elements.finalScore.textContent = result.score;
     elements.bestScore.textContent = progress.bestScore;
+    elements.finalCorrect.textContent = `${result.correctCount}/${result.totalQuestions}`;
+    elements.finalRate.textContent = `${result.correctionRate}%`;
     elements.finalTime.textContent = result.elapsedSeconds;
     elements.resultMessage.textContent = result.message;
+    elements.competitionResult.classList.add("hidden");
+    elements.competitionNextButton.classList.add("hidden");
     elements.wrongReview.innerHTML = "";
 
     if (result.wrongAnswers.length === 0) {
@@ -152,6 +180,23 @@
     });
   }
 
+  function renderCompetitionPrompt(currentResult) {
+    elements.competitionResult.classList.remove("hidden");
+    elements.competitionResult.innerHTML = `<p>CXY finished: ${currentResult.correctCount}/${currentResult.totalQuestions}, ${currentResult.correctionRate}%, ${currentResult.elapsedSeconds}s.</p><p>Now let CXR take a turn.</p>`;
+    elements.competitionNextButton.classList.remove("hidden");
+    elements.competitionNextButton.textContent = "Start CXR turn";
+  }
+
+  function renderCompetitionResult(comparison) {
+    elements.competitionResult.classList.remove("hidden");
+    elements.competitionNextButton.classList.add("hidden");
+    elements.competitionResult.innerHTML = [
+      `<p><strong>Competition result:</strong> ${comparison.winner}</p>`,
+      `<p>CXY: ${comparison.cxy.correctCount}/${comparison.cxy.totalQuestions}, ${comparison.cxy.correctionRate}%, ${comparison.cxy.elapsedSeconds}s</p>`,
+      `<p>CXR: ${comparison.cxr.correctCount}/${comparison.cxr.totalQuestions}, ${comparison.cxr.correctionRate}%, ${comparison.cxr.elapsedSeconds}s</p>`
+    ].join("");
+  }
+
   RocketMath.ui = {
     elements,
     showScreen,
@@ -164,7 +209,9 @@
     showHint,
     showMessage,
     updateAudioButtons,
-    renderResult
+    renderResult,
+    renderCompetitionPrompt,
+    renderCompetitionResult
   };
 
   window.RocketMath = RocketMath;
